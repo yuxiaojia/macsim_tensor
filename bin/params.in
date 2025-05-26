@@ -53,8 +53,8 @@ shared_mem_cycles 2
 shared_mem_ports 1
 byte_level_access 0
 
-l1_small_line_size 128
-#96 KB
+l1_small_line_size 64
+#48 KB
 l1_small_num_set 128 
 l1_small_assoc 6
 #16 KB
@@ -110,7 +110,7 @@ link_width 32
 
 # DEBUG
 debug_core_id 0
-debug_cycle_start 1
+debug_cycle_start 0
 debug_cycle_stop 0
 debug_front_stage 0
 debug_alloc_stage 0
@@ -120,7 +120,7 @@ debug_dcu_stage 0
 debug_retire_stage 0
 debug_map_stage 0
 debug_mem  0
-debug_trace_read 1 
+debug_trace_read 0
 debug_print_trace 1
 debug_sim_thread_schedule 0
 debug_cache_lib 0

@@ -117,6 +117,7 @@ void smc_allocate_c::run_a_cycle(void) {
     int req_lb = 0;  // required load buffer entries
     int req_int_reg = 0;  // required alloc queue type
     int req_fp_reg = 0;  // required integer registers
+    bool req_tensor = false; // req tensor boolean
 
     if ((uop->m_mem_type == MEM_LD_LM) || (uop->m_mem_type == MEM_LD_SM) ||
         (uop->m_mem_type == MEM_LD_GM) || (uop->m_mem_type == MEM_LD_CM) ||
@@ -135,6 +136,18 @@ void smc_allocate_c::run_a_cycle(void) {
     else if (uop->m_uop_type == UOP_FCVT ||
              uop->m_uop_type == UOP_FADD)  // fp register
       req_fp_reg = 1;
+    /* Ali */
+    else if(uop->m_uop_type == UOP_NVBIT_HMMA)
+    {
+      printf("core_id:%d thread_id:%d inst_num:%llu uop_type:%d is peeked\n",
+               m_core_id, uop->m_thread_id, uop->m_inst_num, uop->m_uop_type);
+      assert(true);
+      assert(false);
+      req_tensor = true;
+    }else
+    {
+     //  printf("unknown\n");
+    }
 
     pqueue_c<gpu_allocq_entry_s> *gpu_alloc_q;
     ALLOCQ_Type gpu_alloc_q_type;
@@ -154,7 +167,13 @@ void smc_allocate_c::run_a_cycle(void) {
       } else if (req_sb || req_lb) {
         gpu_alloc_q_type = mem_ALLOCQ;
         q_type = *KNOB(KNOB_MEM_ALLOCQ_INDEX);
-      } else {
+      } 
+      /* Ali */
+      else if(req_tensor){
+        gpu_alloc_q_type = tensor_ALLOCQ;
+        q_type = *KNOB(KNOB_TENSOR_ALLOCQ_INDEX);        
+      }
+      else {
         gpu_alloc_q_type = gen_ALLOCQ;
         q_type = *KNOB(KNOB_GEN_ALLOCQ_INDEX);
       }

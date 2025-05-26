@@ -371,6 +371,9 @@ bool schedule_smc_c::uop_schedule_smc(int thread_id, int entry,
     case fp_ALLOCQ:
       --m_num_per_sched[fp_ALLOCQ];
       break;
+    case tensor_ALLOCQ:
+      --m_num_per_sched[tensor_ALLOCQ];
+      break;
     default:
       printf("unknown queue\n");
       exit(EXIT_FAILURE);

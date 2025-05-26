@@ -38,21 +38,29 @@ param<GIAQ_SIZE, giaq_size, uns32, 32>
 param<MIAQ_SIZE, miaq_size, uns32, 16>
 param<FQ_SIZE,   fq_size,   uns32, 32>
 param<SIAQ_SIZE, siaq_size, uns32, 32>
+/* Ali */
+param<TIAQ_SIZE, tiaq_size, uns32, 8>
 
 param<GIAQ_MEDIUM_SIZE, giaq_medium_size, uns32, KNOB_GIAQ_SIZE>
 param<MIAQ_MEDIUM_SIZE, miaq_medium_size, uns32, KNOB_MIAQ_SIZE>
 param<FQ_MEDIUM_SIZE,   fq_medium_size,   uns32, KNOB_FQ_SIZE>
 param<SIAQ_MEDIUM_SIZE, siaq_medium_size, uns32, KNOB_SIAQ_SIZE>
+/* Ali */
+param<TIAQ_MEDIUM_SIZE, tiaq_medium_size, uns32, KNOB_TIAQ_SIZE>
 
 param<GIAQ_LARGE_SIZE, giaq_large_size, uns32, KNOB_GIAQ_SIZE>
 param<MIAQ_LARGE_SIZE, miaq_large_size, uns32, KNOB_MIAQ_SIZE>
 param<FQ_LARGE_SIZE,   fq_large_size,   uns32, KNOB_FQ_SIZE>
 param<SIAQ_LARGE_SIZE, siaq_large_size, uns32, KNOB_SIAQ_SIZE>
+/* Ali */
+param<TIAQ_LARGE_SIZE, tiaq_large_size, uns32, KNOB_TIAQ_SIZE>
 
 param<GEN_ALLOCQ_INDEX,   giaq_index, int, 0>
 param<MEM_ALLOCQ_INDEX,   miaq_index, int, 1>
 param<FLOAT_ALLOCQ_INDEX, fiaq_index, int, 2>
 param<SIMD_ALLOCQ_INDEX,  siaq_index, int, 3>
+/* Ali */
+param<TENSOR_ALLOCQ_INDEX, tiaq_index, int, 4>
 
 param<ONE_CYCLE_EXEC,           	one_cycle_exec,         		bool,   0>
 
