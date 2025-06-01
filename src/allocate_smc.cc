@@ -139,10 +139,8 @@ void smc_allocate_c::run_a_cycle(void) {
     /* Ali */
     else if(uop->m_uop_type == UOP_NVBIT_HMMA)
     {
-      printf("core_id:%d thread_id:%d inst_num:%llu uop_type:%d is peeked\n",
-               m_core_id, uop->m_thread_id, uop->m_inst_num, uop->m_uop_type);
-      assert(true);
-      assert(false);
+      // printf("core_id:%d thread_id:%d inst_num:%llu uop_type:%d is peeked\n",
+      //         m_core_id, uop->m_thread_id, uop->m_inst_num, uop->m_uop_type);
       req_tensor = true;
     }else
     {
