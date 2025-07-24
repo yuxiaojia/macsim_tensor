@@ -136,11 +136,12 @@ void smc_allocate_c::run_a_cycle(void) {
     else if (uop->m_uop_type == UOP_FCVT ||
              uop->m_uop_type == UOP_FADD)  // fp register
       req_fp_reg = 1;
-    /* Ali */
     else if(uop->m_uop_type == UOP_NVBIT_HMMA)
     {
       // printf("core_id:%d thread_id:%d inst_num:%llu uop_type:%d is peeked\n",
       //         m_core_id, uop->m_thread_id, uop->m_inst_num, uop->m_uop_type);
+
+      // collect total tensor instruction
       req_tensor = true;
     }else
     {
@@ -152,8 +153,26 @@ void smc_allocate_c::run_a_cycle(void) {
 
     if (*KNOB(KNOB_GPU_USE_SINGLE_ALLOCQ_TYPE) &&
         *KNOB(KNOB_GPU_SHARE_ALLOCQS_BETWEEN_THREADS)) {
-      gpu_alloc_q = m_gpu_alloc_q[*m_simBase->m_knobs->KNOB_GEN_ALLOCQ_INDEX];
-      gpu_alloc_q_type = gen_ALLOCQ;
+      if(req_tensor){
+        gpu_alloc_q =  m_gpu_alloc_q[*m_simBase->m_knobs->KNOB_TENSOR_ALLOCQ_INDEX];
+        gpu_alloc_q_type = tensor_ALLOCQ; 
+
+        // Not found existing kernel
+        if (m_simBase->m_kernel_stats.find(m_kernel_id) == m_simBase->m_kernel_stats.end()) {
+            m_simBase->m_kernel_stats.emplace(m_kernel_id, std::make_unique<KernelStatistics>(m_kernel_id));
+        }
+
+        // Record the per-kernel total instruction here 
+        m_simBase->m_kernel_stats[m_kernel_id]->total_tensor_insts += 1;
+        
+        // printf("core_id:%d thread_id:%d inst_num:%llu blabla tensor:%d\n",
+        //       m_core_id, uop->m_thread_id, uop->m_inst_num, m_kernel_id); 
+
+      }else{
+        gpu_alloc_q = m_gpu_alloc_q[*m_simBase->m_knobs->KNOB_GEN_ALLOCQ_INDEX];
+        gpu_alloc_q_type = gen_ALLOCQ;
+      }
+      
     } else {
       assert(0);
       int q_type = *m_simBase->m_knobs->KNOB_GEN_ALLOCQ_INDEX;
@@ -166,10 +185,13 @@ void smc_allocate_c::run_a_cycle(void) {
         gpu_alloc_q_type = mem_ALLOCQ;
         q_type = *KNOB(KNOB_MEM_ALLOCQ_INDEX);
       } 
-      /* Ali */
       else if(req_tensor){
         gpu_alloc_q_type = tensor_ALLOCQ;
-        q_type = *KNOB(KNOB_TENSOR_ALLOCQ_INDEX);        
+        q_type = *KNOB(KNOB_TENSOR_ALLOCQ_INDEX);  
+        // record the per-kernel total instruction here     
+        printf("core_id:%d thread_id:%d inst_num:%llu blabla tensor:%d\n",
+              m_core_id, uop->m_thread_id, uop->m_inst_num, m_kernel_id); 
+
       }
       else {
         gpu_alloc_q_type = gen_ALLOCQ;
@@ -177,6 +199,19 @@ void smc_allocate_c::run_a_cycle(void) {
       }
       gpu_alloc_q = m_gpu_alloc_q[q_type];
     }
+
+    if(m_simBase->m_prev_kernel_id != m_kernel_id)
+    {
+      printf("core_id:%d thread_id:%d inst_num:%llu blabla tensor:%d\n",
+              m_core_id, uop->m_thread_id, uop->m_inst_num, m_kernel_id); 
+      m_simBase->m_prev_kernel_id = m_kernel_id;
+    }
+
+    // total kernel cycles
+
+    // total kernel cycles when tensor active
+
+    // total tensor pipeline 
 
     // FIXME
     // check rob and load store spaces

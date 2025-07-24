@@ -1050,6 +1050,28 @@ private:
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Kernel stats
+///
+/// This class contains kernel id, total tensor instructions per kernel, total elapsed cycles 
+/// per kernel and total active cycles using tensor coreper kernel
+///////////////////////////////////////////////////////////////////////////////////////////////
+class KernelStatistics {
+  public:
+      int kernel_id = -1;
+      uint64_t total_tensor_insts = 0;
+      uint64_t total_cycles = 0;
+      uint64_t tensor_active_cycles = 0;
+
+      // Constructor for kernel id
+      KernelStatistics(int id) : kernel_id(id) {}
+
+      double utilization() const {
+          return total_cycles ? static_cast<double>(tensor_active_cycles) / total_cycles : 0.0;
+      }
+};
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 // Macros to accumulate stats
 

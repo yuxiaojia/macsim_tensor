@@ -126,6 +126,16 @@ public:
     return m_allocate_running;
   }
 
+   /*! \fn set_kernel_id(unsigned int)
+   *  \brief get the kernel id for the allocated process
+   *  \param kernel_id the current running kernel id
+   *  \return void
+   */
+  void set_kernel_id(unsigned int kernel_id)
+  {
+    m_kernel_id = kernel_id;
+  }
+
 private:
   int m_core_id; /**< core id */
   pqueue_c<int*>* m_frontend_q; /**< frontend queue */
@@ -137,6 +147,7 @@ private:
   bool m_allocate_running; /**< Enable allocation stage */
   Counter m_cur_core_cycle; /**< current core cycle */
   int m_num_queues; /**< number of allocation queue types */
+  unsigned int m_kernel_id; /**< the current running kernel id */
 
   resource_c*
     m_resource; /**< resource structure to hold ld/st buffer, INT/REG buffer */

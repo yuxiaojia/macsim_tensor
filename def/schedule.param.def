@@ -33,40 +33,34 @@ param<ISCHED_SIZE,            isched_size,            uns16,         16>
 param<MSCHED_SIZE,            msched_size,            uns16,         8>
 param<FSCHED_SIZE,            fsched_size,            uns16,         24>
 param<SSCHED_SIZE,            ssched_size,            uns16,         32>
-/* Ali */
-param<TSCHED_SIZE,            tsched_size,            uns16,         32>
+param<TSCHED_SIZE,            tsched_size,            uns16,         16>
 
 param<ISCHED_MEDIUM_SIZE,     isched_medium_size,     uns16,         KNOB_ISCHED_SIZE> 
 param<MSCHED_MEDIUM_SIZE,     msched_medium_size,     uns16,         KNOB_MSCHED_SIZE>
 param<FSCHED_MEDIUM_SIZE,     fsched_medium_size,     uns16,         KNOB_FSCHED_SIZE>
 param<SSCHED_MEDIUM_SIZE,     ssched_medium_size,     uns16,         KNOB_SSCHED_SIZE>
-/* Ali */
 param<TSCHED_MEDIUM_SIZE,     tsched_medium_size,     uns16,         KNOB_TSCHED_SIZE>
 
 param<ISCHED_LARGE_SIZE,      isched_large_size,      uns16,         KNOB_ISCHED_SIZE> 
 param<MSCHED_LARGE_SIZE,      msched_large_size,      uns16,         KNOB_MSCHED_SIZE>
 param<FSCHED_LARGE_SIZE,      fsched_large_size,      uns16,         KNOB_FSCHED_SIZE>
 param<SSCHED_LARGE_SIZE,      ssched_large_size,      uns16,         KNOB_SSCHED_SIZE>
-/* Ali */
 param<TSCHED_LARGE_SIZE,      tsched_large_size,      uns16,         KNOB_TSCHED_SIZE>
 
 param<ISCHED_RATE,            isched_rate,            uns16,         2>
 param<MSCHED_RATE,            msched_rate,            uns16,         1>
 param<FSCHED_RATE,            fsched_rate,            uns16,         2>
 param<SSCHED_RATE,            ssched_rate,            uns16,         1>
-/* Ali */
-param<TSCHED_RATE,            tsched_rate,            uns16,         1>
+param<TSCHED_RATE,            tsched_rate,            uns16,         2>
 param<ISCHED_MEDIUM_RATE,     isched_medium_rate,     uns16,         KNOB_ISCHED_RATE>
 param<MSCHED_MEDIUM_RATE,     msched_medium_rate,     uns16,         KNOB_MSCHED_RATE>
 param<FSCHED_MEDIUM_RATE,     fsched_medium_rate,     uns16,         KNOB_FSCHED_RATE>
 param<SSCHED_MEDIUM_RATE,     ssched_medium_rate,     uns16,         KNOB_SSCHED_RATE>
-/* Ali */
 param<TSCHED_MEDIUM_RATE,     tsched_medium_rate,     uns16,         KNOB_TSCHED_RATE>
 param<ISCHED_LARGE_RATE,      isched_large_rate,      uns16,         KNOB_ISCHED_RATE>
 param<MSCHED_LARGE_RATE,      msched_large_rate,      uns16,         KNOB_MSCHED_RATE>
 param<FSCHED_LARGE_RATE,      fsched_large_rate,      uns16,         KNOB_FSCHED_RATE>
 param<SSCHED_LARGE_RATE,      ssched_large_rate,      uns16,         KNOB_SSCHED_RATE>
-/* Ali */
 param<TSCHED_LARGE_RATE,      tsched_large_rate,      uns16,         KNOB_TSCHED_RATE>
 
 param<SCHED_TO_WIDTH,         sched_to_width,         uns16,         2> 

@@ -27,6 +27,7 @@ schedule ooo
 isched_rate 4
 msched_rate 4
 fsched_rate 4
+tsched_rate 4
 bp_hist_length 14
 max_block_per_core  8  
 fetch_policy rr
@@ -97,8 +98,8 @@ bug_detector_enable 1
 
 sim_cycle_count 0
 max_insts 200000000
-heartbeat_interval 1000000
-forward_progress_limit 100000
+heartbeat_interval 10000000
+forward_progress_limit 1000000
 blocks_to_simulate 0
 ptx_exec_ratio 2
 num_warp_scheduler 2
@@ -109,19 +110,21 @@ noc_dimension 0
 link_width 32
 
 # DEBUG
-debug_core_id 0
-debug_cycle_start 0
-debug_cycle_stop 0
-debug_front_stage 0
-debug_alloc_stage 0
-debug_schedule_stage 0
-debug_exec_stage 0
+debug_core_id 1
+debug_cycle_start 1
+debug_cycle_stop 1
+debug_front_stage 1
+debug_alloc_stage 1
+debug_schedule_stage 1
+debug_exec_stage1
 debug_dcu_stage 0
-debug_retire_stage 0
-debug_map_stage 0
-debug_mem  0
-debug_trace_read 0
+debug_retire_stage 1
+debug_map_stage 1
+debug_mem  1
+debug_trace_read 1
 debug_print_trace 1
-debug_sim_thread_schedule 0
+debug_sim_thread_schedule 1
 debug_cache_lib 0
-debug_bp_dir 0
+debug_bp_dir 1
+
+gpu_use_single_iaq_type 1

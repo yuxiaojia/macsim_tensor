@@ -44,6 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <zlib.h>
 #include <unordered_map>
 #include <set>
+#include <vector>
 
 #include "global_defs.h"
 #include "global_types.h"
@@ -411,6 +412,7 @@ private:
   unordered_map<int, Counter>
     m_appl_cyccount_info; /**< per application cycle count info */
   macsim_c* m_simBase; /**< macsim_c base class for simulation globals */
+  vector<int> m_manager_core_pool; /**< The core pool */
 };
 
 #endif

@@ -44,6 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "global_defs.h"
 #include "global_types.h"
+#include "statistics.h"
 
 #ifdef IRIS
 #include "manifold/kernel/include/kernel/clock.h"
@@ -207,6 +208,7 @@ public:
   int m_num_running_core; /**< set to any non0 number before simulation start */
   bool m_repeat_done; /**< in trace repeat mode, indicate repetition done */
   bool m_gpu_paused; /**< indicate whether GPU can start its execution */
+  unsigned int m_prev_kernel_id;  /**< indicate last kernel executed */
 
   FILE *g_mystdout; /**< default output stream */
   FILE *g_mystderr; /**< default error stream */
@@ -264,6 +266,7 @@ public:
     m_block_schedule_info; /**< block schedule info */
   unordered_map<int, process_s *> m_sim_processes; /**< process map */
   unordered_map<int, thread_stat_s *> m_thread_stats; /**< thread stat map */
+  unordered_map<int, unique_ptr<KernelStatistics> > m_kernel_stats; /**< kernel stat map */
 
   struct timeval m_begin_sim; /**< simulation start time */
   struct timeval m_end_sim; /**< simulation termination time */

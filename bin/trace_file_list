@@ -1,2 +1,5 @@
 1
-/home/yjia305/2025_summer/gemm_inf_half/kernel_config.txt
+/home/yjia305/2025_summer/gemm_inf_half/Kernel13/trace.txt
+///home/yjia305/2025_summer/gemm_inf_half/kernel_config.txt
+
+// /fast_data/echung67/trace/nvbit/backprop/2048/kernel_config.txt

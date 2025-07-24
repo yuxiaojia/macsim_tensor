@@ -52,7 +52,6 @@ typedef enum Iaq_Type_enum {
   mem_ALLOCQ,
   fp_ALLOCQ,
   simd_ALLOCQ,
-    //Ali,
   tensor_ALLOCQ,
   max_ALLOCQ
 } ALLOCQ_Type;

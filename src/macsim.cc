@@ -94,6 +94,7 @@ macsim_c::macsim_c() {
   m_end_simulation = false;
   m_repeat_done = false;
   m_gpu_paused = true;
+  m_prev_kernel_id = -1;
 
   for (int ii = 0; ii < MAX_NUM_CORES; ++ii) {
     m_core_cycle[ii] = 0;
