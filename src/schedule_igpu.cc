@@ -236,6 +236,7 @@ bool schedule_igpu_c::uop_schedule_igpu(int thread_id, int entry,
 
   cur_uop = (*thread_m_rob)[entry];
   int q_num = cur_uop->m_allocq_num;
+  int exec_num = cur_uop->m_exec_num;
   bool bogus = cur_uop->m_bogus;
 
   *sched_fail_reason = SCHED_SUCCESS;
@@ -266,7 +267,7 @@ bool schedule_igpu_c::uop_schedule_igpu(int thread_id, int entry,
     }
 
     // Check for port availability.
-    if (!m_exec->port_available(q_num)) {
+    if (!m_exec->port_available(exec_num)) {
       *sched_fail_reason = SCHED_FAIL_NO_AVAILABLE_PORTS;
       DEBUG("core_id:%d thread_id:%d uop_num:%lld ports are not ready \n",
             m_core_id, cur_uop->m_thread_id, cur_uop->m_uop_num);

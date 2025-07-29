@@ -133,6 +133,9 @@ exec_c::exec_c(EXEC_INTERFACE_PARAMS(), macsim_c* simBase)
   : EXEC_INTERFACE_INIT() {
   m_simBase = simBase;
 
+  m_max_port.resize(max_EXEC, 0);
+  m_port_used.resize(max_EXEC, 0);
+
   EXEC_CONFIG();
 
   clear_ports();
@@ -224,7 +227,7 @@ exec_c::~exec_c() {
 
 // clear execution ports
 void exec_c::clear_ports() {
-  for (int ii = 0; ii < max_ALLOCQ; ++ii) {
+  for (int ii = 0; ii < max_EXEC; ++ii) {
     m_port_used[ii] = 0;
   }
 }
@@ -241,8 +244,8 @@ int exec_c::get_latency(Uop_Type uop_type) {
 }
 
 // check available execution port for specific instruction type
-bool exec_c::port_available(int uop_type) {
-  return m_port_used[uop_type] < m_max_port[uop_type];
+bool exec_c::port_available(int exec_type) {
+  return m_port_used[exec_type] < m_max_port[exec_type];
 }
 
 // use an execution port
@@ -258,7 +261,7 @@ void exec_c::use_port(int thread_id, int entry) {
 
   // use specified port
   if (!uop->m_bogus) {
-    ++m_port_used[uop->m_allocq_num];
+    ++m_port_used[uop->m_exec_num];
   }
 }
 

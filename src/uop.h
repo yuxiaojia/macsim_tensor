@@ -56,6 +56,18 @@ typedef enum Iaq_Type_enum {
 } ALLOCQ_Type;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief execution queue types
+///////////////////////////////////////////////////////////////////////////////////////////////
+typedef enum exec_Type_enum {
+  gen_EXEC = 0,
+  mem_EXEC,
+  fp_EXEC,
+  simd_EXEC,
+  tensor_EXEC,
+  max_EXEC
+} EXEC_Type;
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief uop types
 ///////////////////////////////////////////////////////////////////////////////////////////////
 typedef enum Uop_Type_enum {
@@ -818,6 +830,7 @@ public:
   int m_rob_entry; /**< rob entry id */
   bool m_in_scheduler; /**< in scheduler */
   ALLOCQ_Type m_allocq_num; /**< alloc queue id */
+  EXEC_Type m_exec_num; /**< exec queue id */
   bool m_in_iaq; /**< in allocation queue */
   Counter *m_last_dep_exec; /**< last dependent execution cycle */
   bool m_srcs_rdy; /**< source ready */

@@ -117,32 +117,56 @@ void smc_allocate_c::run_a_cycle(void) {
     int req_lb = 0;  // required load buffer entries
     int req_int_reg = 0;  // required alloc queue type
     int req_fp_reg = 0;  // required integer registers
+    bool req_tensor = false; // req tensor boolean
 
     if ((uop->m_mem_type == MEM_LD_LM) || (uop->m_mem_type == MEM_LD_SM) ||
         (uop->m_mem_type == MEM_LD_GM) || (uop->m_mem_type == MEM_LD_CM) ||
-        (uop->m_mem_type == MEM_LD_TM) ||
-        (uop->m_mem_type == MEM_LD_PM))  // load queue
+        (uop->m_mem_type == MEM_LD_TM) || (uop->m_mem_type == MEM_LD_PM))  // load queue
+    {
       req_lb = 1;
-    else if ((uop->m_mem_type == MEM_ST_LM) || (uop->m_mem_type == MEM_ST_SM) ||
-             (uop->m_mem_type == MEM_ST_GM))  // store queue
+    }
+    else if ((uop->m_mem_type == MEM_ST_LM) || (uop->m_mem_type == MEM_ST_SM) || (uop->m_mem_type == MEM_ST_GM))  // store queue
+    {
       req_sb = 1;
+    }
     else if (
-      uop->m_uop_type ==
-        UOP_IADD ||  // integer register // FIXME(replace  with GPU uops) !! hkim  mar-8-2016
+      uop->m_uop_type == UOP_IADD ||  // integer register // FIXME(replace  with GPU uops) !! hkim  mar-8-2016
       uop->m_uop_type == UOP_IMUL ||
       uop->m_uop_type == UOP_ICMP)
+    {
       req_int_reg = 1;
-    else if (uop->m_uop_type == UOP_FCVT ||
-             uop->m_uop_type == UOP_FADD)  // fp register
+    }
+    else if (uop->m_uop_type == UOP_FCVT || uop->m_uop_type == UOP_FADD)  // fp register
+    {
       req_fp_reg = 1;
+    }
+    else if(uop->m_uop_type == UOP_NVBIT_HMMA)
+    {
+      // collect total tensor instruction
+      req_tensor = true;
+    }
+    else
+    {
+      // Nothing
+    }
 
     pqueue_c<gpu_allocq_entry_s> *gpu_alloc_q;
     ALLOCQ_Type gpu_alloc_q_type;
+    EXEC_Type gpu_exec_type;
 
     if (*KNOB(KNOB_GPU_USE_SINGLE_ALLOCQ_TYPE) &&
         *KNOB(KNOB_GPU_SHARE_ALLOCQS_BETWEEN_THREADS)) {
-      gpu_alloc_q = m_gpu_alloc_q[*m_simBase->m_knobs->KNOB_GEN_ALLOCQ_INDEX];
-      gpu_alloc_q_type = gen_ALLOCQ;
+        if(req_tensor)
+        {
+          gpu_exec_type = tensor_EXEC;
+        }
+        else
+        {
+          gpu_exec_type = gen_EXEC;
+        }
+        gpu_alloc_q = m_gpu_alloc_q[*m_simBase->m_knobs->KNOB_GEN_ALLOCQ_INDEX];
+        gpu_alloc_q_type = gen_ALLOCQ;
+          
     } else {
       assert(0);
       int q_type = *m_simBase->m_knobs->KNOB_GEN_ALLOCQ_INDEX;
@@ -204,6 +228,7 @@ void smc_allocate_c::run_a_cycle(void) {
 
     // insert an uop into reorder buffer
     uop->m_allocq_num = gpu_alloc_q_type;
+    uop->m_exec_num = gpu_exec_type;
     uop->m_state = OS_ALLOCATE;
     thread_rob->push(uop);
 

@@ -190,8 +190,8 @@ private:
   bool m_nvbit_sim; /**< NVBIT simulation */ 
   int m_latency[NUM_UOP_TYPES]; /**< latency map */
   Counter m_cur_core_cycle; /**< current core cycle */
-  int m_max_port[max_ALLOCQ]; /**< maximum port */
-  int m_port_used[max_ALLOCQ]; /**< number of currently used port */
+  std::vector<int> m_max_port;     /**< maximum port */
+  std::vector<int> m_port_used;    /**< number of currently used port */
   bool* m_bank_busy; /**< indicate dcache bank busy */
 
   macsim_c* m_simBase; /**< macsim_c base class for simulation globals */

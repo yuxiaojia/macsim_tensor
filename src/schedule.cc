@@ -173,6 +173,7 @@ bool schedule_c::check_srcs(int entry) {
 bool schedule_c::uop_schedule(int entry, SCHED_FAIL_TYPE* sched_fail_reason) {
   uop_c* cur_uop = (*m_rob)[entry];
   int q_num = cur_uop->m_allocq_num;
+  int exec_num = cur_uop->m_exec_num;
   bool bogus = cur_uop->m_bogus;
   *sched_fail_reason = SCHED_SUCCESS;
 
@@ -218,7 +219,7 @@ bool schedule_c::uop_schedule(int entry, SCHED_FAIL_TYPE* sched_fail_reason) {
     }
 
     // Check for port availability.
-    if (!m_exec->port_available(q_num)) {
+    if (!m_exec->port_available(exec_num)) {
       *sched_fail_reason = SCHED_FAIL_NO_AVAILABLE_PORTS;
       DEBUG_CORE(m_core_id,
                  "core_id:%d thread_id:%d uop_num:%lld ports are not ready \n",

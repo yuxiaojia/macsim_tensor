@@ -55,6 +55,22 @@ param<MSCHED_LARGE_RATE,      msched_large_rate,      uns16,         KNOB_MSCHED
 param<FSCHED_LARGE_RATE,      fsched_large_rate,      uns16,         KNOB_FSCHED_RATE>
 param<SSCHED_LARGE_RATE,      ssched_large_rate,      uns16,         KNOB_SSCHED_RATE>
 
+param<IEXEC_SIZE,            iexec_size,            uns16,         16>
+param<MEXEC_SIZE,            mexec_size,            uns16,         8>
+param<FEXEC_SIZE,            fexec_size,            uns16,         24>
+param<SEXEC_SIZE,            sexec_size,            uns16,         32>
+param<TEXEC_SIZE,            texec_size,            uns16,         32>
+param<IEXEC_MEDIUM_SIZE,     iexec_medium_size,     uns16,         KNOB_IEXEC_SIZE>
+param<MEXEC_MEDIUM_SIZE,     mexec_medium_size,     uns16,         KNOB_MEXEC_SIZE>
+param<FEXEC_MEDIUM_SIZE,     fexec_medium_size,     uns16,         KNOB_FEXEC_SIZE>
+param<SEXEC_MEDIUM_SIZE,     sexec_medium_size,     uns16,         KNOB_SEXEC_SIZE>
+param<TEXEC_MEDIUM_SIZE,     texec_medium_size,     uns16,         KNOB_TEXEC_SIZE>
+param<IEXEC_LARGE_SIZE,      iexec_large_size,      uns16,         KNOB_IEXEC_SIZE>
+param<MEXEC_LARGE_SIZE,      mexec_large_size,      uns16,         KNOB_MEXEC_SIZE>
+param<FEXEC_LARGE_SIZE,      fexec_large_size,      uns16,         KNOB_FEXEC_SIZE>
+param<SEXEC_LARGE_SIZE,      sexec_large_size,      uns16,         KNOB_SEXEC_SIZE>
+param<TEXEC_LARGE_SIZE,      texec_large_size,      uns16,         KNOB_TEXEC_SIZE>
+
 param<SCHED_TO_WIDTH,         sched_to_width,         uns16,         2> 
 param<SCHED_TO_MEDIUM_WIDTH,  sched_to_medium_width,  uns16,         KNOB_SCHED_TO_WIDTH> 
 param<SCHED_TO_LARGE_WIDTH,   sched_to_large_width,   uns16,         KNOB_SCHED_TO_WIDTH> 

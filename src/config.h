@@ -387,12 +387,22 @@ POSSIBILITY OF SUCH DAMAGE.
   int mem_sched_rate = 0;                                                    \
   int fp_sched_rate = 0;                                                     \
   int simd_sched_rate = 0;                                                   \
+  int int_exec_size = 0;                                                     \
+  int mem_exec_size = 0;                                                     \
+  int fp_exec_size = 0;                                                      \
+  int simd_exec_size = 0;                                                    \
+  int tensor_exec_size = 0;                                                  \
   switch (m_unit_type) {                                                     \
     case UNIT_SMALL:                                                         \
       int_sched_rate = *m_simBase->m_knobs->KNOB_ISCHED_RATE;                \
       mem_sched_rate = *m_simBase->m_knobs->KNOB_MSCHED_RATE;                \
       fp_sched_rate = *m_simBase->m_knobs->KNOB_FSCHED_RATE;                 \
       simd_sched_rate = *m_simBase->m_knobs->KNOB_SSCHED_RATE;               \
+      int_exec_size = *m_simBase->m_knobs->KNOB_IEXEC_SIZE;                  \
+      mem_exec_size = *m_simBase->m_knobs->KNOB_MEXEC_SIZE;                  \
+      fp_exec_size = *m_simBase->m_knobs->KNOB_FEXEC_SIZE;                   \
+      simd_exec_size = *m_simBase->m_knobs->KNOB_SEXEC_SIZE;                 \
+      tensor_exec_size = *m_simBase->m_knobs->KNOB_TEXEC_SIZE;               \
       m_dcache_cycles = *m_simBase->m_knobs->KNOB_L1_SMALL_LATENCY;          \
       m_ptx_sim =                                                            \
         static_cast<string>(*m_simBase->m_knobs->KNOB_CORE_TYPE) == "ptx"    \
@@ -414,6 +424,11 @@ POSSIBILITY OF SUCH DAMAGE.
       mem_sched_rate = *m_simBase->m_knobs->KNOB_MSCHED_MEDIUM_RATE;         \
       fp_sched_rate = *m_simBase->m_knobs->KNOB_FSCHED_MEDIUM_RATE;          \
       simd_sched_rate = *m_simBase->m_knobs->KNOB_SSCHED_MEDIUM_RATE;        \
+      int_exec_size = *m_simBase->m_knobs->KNOB_IEXEC_MEDIUM_SIZE;           \
+      mem_exec_size = *m_simBase->m_knobs->KNOB_MEXEC_MEDIUM_SIZE;           \
+      fp_exec_size = *m_simBase->m_knobs->KNOB_FEXEC_MEDIUM_SIZE;            \
+      simd_exec_size = *m_simBase->m_knobs->KNOB_SEXEC_MEDIUM_SIZE;          \
+      tensor_exec_size = *m_simBase->m_knobs->KNOB_TEXEC_MEDIUM_SIZE;        \
       m_dcache_cycles = *m_simBase->m_knobs->KNOB_L1_MEDIUM_LATENCY;         \
       m_ptx_sim = static_cast<string>(                                       \
                     *m_simBase->m_knobs->KNOB_MEDIUM_CORE_TYPE) == "ptx"     \
@@ -435,6 +450,11 @@ POSSIBILITY OF SUCH DAMAGE.
       mem_sched_rate = *m_simBase->m_knobs->KNOB_MSCHED_LARGE_RATE;          \
       fp_sched_rate = *m_simBase->m_knobs->KNOB_FSCHED_LARGE_RATE;           \
       simd_sched_rate = *m_simBase->m_knobs->KNOB_SSCHED_LARGE_RATE;         \
+      int_exec_size = *m_simBase->m_knobs->KNOB_IEXEC_LARGE_SIZE;            \
+      mem_exec_size = *m_simBase->m_knobs->KNOB_MEXEC_LARGE_SIZE;            \
+      fp_exec_size = *m_simBase->m_knobs->KNOB_FEXEC_LARGE_SIZE;             \
+      simd_exec_size = *m_simBase->m_knobs->KNOB_SEXEC_LARGE_SIZE;           \
+      tensor_exec_size = *m_simBase->m_knobs->KNOB_TEXEC_LARGE_SIZE;         \
       m_dcache_cycles = *m_simBase->m_knobs->KNOB_L1_LARGE_LATENCY;          \
       m_ptx_sim = static_cast<string>(                                       \
                     *m_simBase->m_knobs->KNOB_LARGE_CORE_TYPE) == "ptx"      \
@@ -451,10 +471,11 @@ POSSIBILITY OF SUCH DAMAGE.
       m_acc_sim = (m_igpu_sim || m_ptx_sim || m_nvbit_sim);                  \
       break;                                                                 \
   }                                                                          \
-  m_max_port[gen_ALLOCQ] = int_sched_rate;                                   \
-  m_max_port[mem_ALLOCQ] = mem_sched_rate;                                   \
-  m_max_port[fp_ALLOCQ] = fp_sched_rate;                                     \
-  m_max_port[simd_ALLOCQ] = simd_sched_rate;
+  m_max_port[gen_EXEC] = int_exec_size;                                      \
+  m_max_port[mem_EXEC] = mem_exec_size;                                      \
+  m_max_port[fp_EXEC] = fp_exec_size;                                        \
+  m_max_port[simd_EXEC] = simd_exec_size;                                    \
+  m_max_port[tensor_EXEC] = tensor_exec_size;                             
 
 #define SCHED_CONFIG()                                                         \
   uns16 int_sched_size = 0;                                                    \
