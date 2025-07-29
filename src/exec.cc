@@ -681,6 +681,15 @@ bool exec_c::exec(int thread_id, int entry, uop_c* uop) {
     uop->m_inst_num, uop->m_uop_info.m_dcmiss, uop_latency, uop->m_done_cycle,
     uop->m_pc);
 
+  // printf(
+  //   "done_exec m_core_id:%d thread_id:%d core_cycle_count:%llu uop_num:%llu"
+  //   " inst_num:%llu sched_cycle:%llu exec_cycle:%llu uop->done_cycle:%llu "
+  //   "inst_count:%llu m_allocq_num:%d uop_latency:%d done_cycle:%llu pc:0x%llx\n",
+  //   m_core_id, uop->m_thread_id, m_cur_core_cycle, uop->m_uop_num,
+  //   uop->m_inst_num, uop->m_sched_cycle, uop->m_exec_cycle, uop->m_done_cycle,
+  //   uop->m_inst_num, uop->m_allocq_num, uop_latency, uop->m_done_cycle,
+  //   uop->m_pc);
+
   // branch execution
   if (uop->m_cf_type) {
     br_exec(uop);

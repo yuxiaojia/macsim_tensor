@@ -167,6 +167,11 @@ void retire_c::run_a_cycle() {
 
       cur_uop = rob->front();
 
+      if (!cur_uop->m_done_cycle) {
+        printf("[Retire][Core %d] Uop %llu not ready: done_cycle=0\n",
+           m_core_id, cur_uop->m_uop_num);
+      }   
+
       // uncompleted memory store UOPs can be placed in write buffer
       if (KNOB(KNOB_USE_WB)->getValue() && cur_uop->m_mem_type == MEM_ST &&
           cur_uop->m_exec_cycle != 0) {
@@ -372,6 +377,7 @@ void retire_c::run_a_cycle() {
   }
 
   drain_wb();
+
 }
 
 // Check if the uop is older than all entries in WB
