@@ -353,6 +353,15 @@ public:
    */
   void init(void);
 
+  /**
+   * return the m_gpu_allocate to allow the kernel_id change
+   */
+  smc_allocate_c* get_gpu_allocate()
+  {
+    return m_gpu_allocate;
+  }
+
+
 public:
   // stats to run the simulation (used for the simulation)
   int m_unique_scheduled_thread_num; /**< total number of scheduled threads */

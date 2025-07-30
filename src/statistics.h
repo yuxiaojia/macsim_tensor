@@ -1050,6 +1050,40 @@ private:
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Kernel stats
+///
+/// This class contains kernel id, total tensor instructions per kernel, total elapsed cycles 
+/// per kernel and total active cycles using tensor coreper kernel
+///////////////////////////////////////////////////////////////////////////////////////////////
+class KernelStatistics {
+  public:
+      int kernel_id = -1;
+      uint64_t total_tensor_insts = 0;
+      uint64_t total_cycles = 0;
+      uint64_t tensor_active_cycles = 0;
+      uint64_t tensor_pipelines = 0;
+      uint64_t tensor_pipe_max_usage = 0;
+
+      // Constructor for kernel id
+      KernelStatistics(int id) : kernel_id(id) {}
+
+      double utilization() const {
+          return total_cycles ? static_cast<double>(tensor_pipelines) / total_cycles : 0.0;
+      }
+
+      void print(std::ostream &os) const {
+        os << "Kernel ID             : " << kernel_id << "\n"
+           << "Total Tensor Insts    : " << total_tensor_insts << "\n"
+           << "Total Cycles          : " << total_cycles << "\n"
+           << "Tensor Active Cycles  : " << tensor_active_cycles << "\n"
+           << "Tensor Pipelines Used : " << tensor_pipelines << "\n"
+           << "Tensor Pipelines Max Usage : " << tensor_pipe_max_usage << "\n"
+           << "Utilization (Pipelines/Cycle)        : " << std::fixed << std::setprecision(4) << utilization() << "\n\n";
+    }
+};
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 // Macros to accumulate stats
 

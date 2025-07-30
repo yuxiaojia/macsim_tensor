@@ -94,6 +94,7 @@ macsim_c::macsim_c() {
   m_end_simulation = false;
   m_repeat_done = false;
   m_gpu_paused = true;
+  m_prev_kernel_id = -1;
 
   for (int ii = 0; ii < MAX_NUM_CORES; ++ii) {
     m_core_cycle[ii] = 0;
@@ -1041,6 +1042,9 @@ void macsim_c::finalize() {
   // dump out stat files at the end of simulation
   m_ProcessorStats->saveStats();
 
+  save_kernel_statistics(m_simBase->m_kernel_stats);
+  
+
   cout << "Done\n";
 }
 
@@ -1141,3 +1145,20 @@ void macsim_c::registerCallback(CallbackSendCubeRequest* scr,
   strobeCubeRespQ = scrq;
 }
 #endif  // USING_SST
+
+
+void macsim_c::save_kernel_statistics(const std::unordered_map<int, std::unique_ptr<KernelStatistics>> &stats, const std::string &filename) {
+    std::ofstream out(filename);
+    if (!out.is_open()) {
+        std::cerr << "Failed to open " << filename << "\n";
+        return;
+    }
+
+    for (const auto &entry : stats) {
+        if (entry.second) {
+            entry.second->print(out);
+        }
+    }
+
+    out.close();
+}

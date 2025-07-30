@@ -78,6 +78,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "process_manager.h"
 #include "pref_common.h"
 #include "trace_read.h"
+#include "allocate_smc.h"
 
 #include "debug_macros.h"
 
@@ -611,26 +612,40 @@ void process_manager_c::setup_process(process_s *process) {
     // Allocate cores to this application (bi-directonal)
     // get maximum allowed
     if (*m_simBase->m_knobs->KNOB_MAX_NUM_CORE_PER_APPL == 0) {
+      if(core_pool->empty()){
+        for (int i =0; i < m_manager_core_pool.size(); i++){
+          m_simBase->m_core_pointers[i]->get_gpu_allocate()->set_kernel_id(process->m_current_vector_index - 1);
+        }
+      }
       while (!core_pool->empty()) {
         int core_id = core_pool->front();
+        m_manager_core_pool.push_back(core_pool->front());
         core_pool->pop();
 
         process->m_core_list[core_id] = true;
         m_simBase->m_core_pointers[core_id]->init();
         m_simBase->m_core_pointers[core_id]->add_application(0, process);
+        m_simBase->m_core_pointers[core_id]->get_gpu_allocate()->set_kernel_id(process->m_current_vector_index - 1);
       }
     }
     // get limited (*m_simBase->m_knobs->KNOB_MAX_NUM_CORE_PER_APPL) number of cores
     else {
       int count = 0;
+      if(core_pool->empty()){
+        for (int i =0; i < m_manager_core_pool.size(); i++){
+          m_simBase->m_core_pointers[i]->get_gpu_allocate()->set_kernel_id(process->m_current_vector_index - 1);
+        }
+      }
       while (!core_pool->empty() &&
              count < *m_simBase->m_knobs->KNOB_MAX_NUM_CORE_PER_APPL) {
         int core_id = core_pool->front();
+        m_manager_core_pool.push_back(core_pool->front());
         core_pool->pop();
 
         process->m_core_list[core_id] = true;
         m_simBase->m_core_pointers[core_id]->init();
         m_simBase->m_core_pointers[core_id]->add_application(0, process);
+        m_simBase->m_core_pointers[core_id]->get_gpu_allocate()->set_kernel_id(process->m_current_vector_index - 1);
 
         ++count;
       }
