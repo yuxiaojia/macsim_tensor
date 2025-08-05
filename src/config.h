@@ -475,7 +475,8 @@ POSSIBILITY OF SUCH DAMAGE.
   m_max_port[mem_EXEC] = mem_exec_size;                                      \
   m_max_port[fp_EXEC] = fp_exec_size;                                        \
   m_max_port[simd_EXEC] = simd_exec_size;                                    \
-  m_max_port[tensor_EXEC] = tensor_exec_size;                             
+  m_max_port[tensor_EXEC] = tensor_exec_size;                                \
+  m_tensor_core.resize(tensor_exec_size, 0);
 
 #define SCHED_CONFIG()                                                         \
   uns16 int_sched_size = 0;                                                    \

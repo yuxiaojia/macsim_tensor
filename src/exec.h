@@ -192,6 +192,7 @@ private:
   Counter m_cur_core_cycle; /**< current core cycle */
   std::vector<int> m_max_port;     /**< maximum port */
   std::vector<int> m_port_used;    /**< number of currently used port */
+  std::vector<int> m_tensor_core;    /**< number of tensor cores */
   bool* m_bank_busy; /**< indicate dcache bank busy */
 
   macsim_c* m_simBase; /**< macsim_c base class for simulation globals */

@@ -39,6 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 #include <sstream>
 #include <sys/time.h>
+#include <map>
 
 #include "macsim.h"
 #include "assert_macros.h"
@@ -1146,19 +1147,38 @@ void macsim_c::registerCallback(CallbackSendCubeRequest* scr,
 }
 #endif  // USING_SST
 
-
-void macsim_c::save_kernel_statistics(const std::unordered_map<int, std::unique_ptr<KernelStatistics>> &stats, const std::string &filename) {
+void macsim_c::save_kernel_statistics(
+    const std::unordered_map<int, std::unordered_map<int, std::unique_ptr<KernelStatistics>>> &stats,
+    const std::string &filename)
+{
     std::ofstream out(filename);
     if (!out.is_open()) {
         std::cerr << "Failed to open " << filename << "\n";
         return;
     }
 
-    for (const auto &entry : stats) {
-        if (entry.second) {
-            entry.second->print(out);
+    for (const auto &kernel_pair : stats) {
+        int kernel_id = kernel_pair.first;
+        const auto &core_map = kernel_pair.second;
+
+        out << "======== Kernel ID: " << kernel_id << " ========\n";
+
+        // Sort core_map by core_id
+        std::map<int, const KernelStatistics*> sorted_core_map;
+        for (const auto &core_pair : core_map) {
+            if (core_pair.second) {
+                sorted_core_map[core_pair.first] = core_pair.second.get();
+            }
         }
+
+        for (const auto &core_pair : sorted_core_map) {
+            out << "Core ID: " << core_pair.first << "\n";
+            core_pair.second->print(out);
+        }
+
+        out << "\n";
     }
 
     out.close();
 }
+

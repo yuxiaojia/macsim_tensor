@@ -151,8 +151,8 @@ void smc_allocate_c::run_a_cycle(void) {
     }
 
     // Not found existing kernel
-    if (m_simBase->m_kernel_stats.find(m_kernel_id) == m_simBase->m_kernel_stats.end()) {
-        m_simBase->m_kernel_stats.emplace(m_kernel_id, std::make_unique<KernelStatistics>(m_kernel_id));
+    if (!m_simBase->m_kernel_stats[m_kernel_id][m_core_id]) {
+      m_simBase->m_kernel_stats[m_kernel_id][m_core_id] = std::make_unique<KernelStatistics>(m_kernel_id);
     }
 
     pqueue_c<gpu_allocq_entry_s> *gpu_alloc_q;
@@ -164,7 +164,7 @@ void smc_allocate_c::run_a_cycle(void) {
         if(req_tensor)
         {
           // Record the per-kernel tensor instruction here 
-          m_simBase->m_kernel_stats[m_kernel_id]->total_tensor_insts += 1;
+          m_simBase->m_kernel_stats[m_kernel_id][m_core_id]->total_tensor_insts += 1;
           
           gpu_exec_type = tensor_EXEC;
         }
@@ -193,7 +193,7 @@ void smc_allocate_c::run_a_cycle(void) {
       gpu_alloc_q = m_gpu_alloc_q[q_type];
     }
 
-    m_simBase->m_kernel_stats[m_kernel_id]->total_cycles += 1;
+    m_simBase->m_kernel_stats[m_kernel_id][m_core_id]->total_cycles += 1;
     // FIXME
     // check rob and load store spaces
     rob_c *thread_rob = m_gpu_rob->get_thread_rob(uop->m_thread_id);

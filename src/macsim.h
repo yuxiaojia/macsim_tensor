@@ -193,7 +193,8 @@ public:
   /**
    * Print out kernel statistic
    */
-  void save_kernel_statistics(const std::unordered_map<int, std::unique_ptr<KernelStatistics>> &stats, const std::string &filename = "kernel_stats.txt");
+  void save_kernel_statistics(const std::unordered_map<int, std::unordered_map<int, std::unique_ptr<KernelStatistics>>> &stats,
+                            const std::string &filename = "kernel_stats.txt");
 
 #ifdef IRIS
   /**
@@ -274,7 +275,8 @@ public:
     m_block_schedule_info; /**< block schedule info */
   unordered_map<int, process_s *> m_sim_processes; /**< process map */
   unordered_map<int, thread_stat_s *> m_thread_stats; /**< thread stat map */
-  unordered_map<int, unique_ptr<KernelStatistics> > m_kernel_stats;
+  unordered_map<int, std::unordered_map<int, std::unique_ptr<KernelStatistics>>> m_kernel_stats; /**< per-core per-kernel tensor stat map */
+
 
   struct timeval m_begin_sim; /**< simulation start time */
   struct timeval m_end_sim; /**< simulation termination time */

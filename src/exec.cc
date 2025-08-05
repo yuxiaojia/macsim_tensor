@@ -246,14 +246,19 @@ int exec_c::get_latency(Uop_Type uop_type) {
 
 // check available execution port for specific instruction type
 bool exec_c::port_available(int exec_type) {
+  // get_latency(uop_type)
+  unsigned int curr_kernel_id =  m_simBase->m_core_pointers[m_core_id]->get_gpu_allocate()->get_kernel_id();
   if(exec_type == tensor_EXEC){
     // Not found existing kernel
-    unsigned int curr_kernel_id =  m_simBase->m_core_pointers[m_core_id]->get_gpu_allocate()->get_kernel_id();
-    if (m_simBase->m_kernel_stats.find(curr_kernel_id) == m_simBase->m_kernel_stats.end()) {
-        m_simBase->m_kernel_stats.emplace(curr_kernel_id, std::make_unique<KernelStatistics>(curr_kernel_id));
+    if (!m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]) {
+      m_simBase->m_kernel_stats[curr_kernel_id][m_core_id] = std::make_unique<KernelStatistics>(curr_kernel_id);
     }
-    m_simBase->m_kernel_stats[curr_kernel_id]->tensor_active_cycles += 1;
-    m_simBase->m_kernel_stats[curr_kernel_id]->tensor_pipelines += m_port_used[tensor_EXEC];
+    m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_active_cycles += 1;
+    m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipelines += m_port_used[tensor_EXEC];
+  }
+
+  if(m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipe_max_usage < m_port_used[gen_EXEC]){
+    m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipe_max_usage = m_port_used[gen_EXEC];
   }
   return m_port_used[exec_type] < m_max_port[exec_type];
 }
