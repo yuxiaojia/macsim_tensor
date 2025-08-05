@@ -59,7 +59,7 @@ param<IEXEC_SIZE,            iexec_size,            uns16,         16>
 param<MEXEC_SIZE,            mexec_size,            uns16,         8>
 param<FEXEC_SIZE,            fexec_size,            uns16,         24>
 param<SEXEC_SIZE,            sexec_size,            uns16,         32>
-param<TEXEC_SIZE,            texec_size,            uns16,         32>
+param<TEXEC_SIZE,            texec_size,            uns16,         8>
 param<IEXEC_MEDIUM_SIZE,     iexec_medium_size,     uns16,         KNOB_IEXEC_SIZE>
 param<MEXEC_MEDIUM_SIZE,     mexec_medium_size,     uns16,         KNOB_MEXEC_SIZE>
 param<FEXEC_MEDIUM_SIZE,     fexec_medium_size,     uns16,         KNOB_FEXEC_SIZE>

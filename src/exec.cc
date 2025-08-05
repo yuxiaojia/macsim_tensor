@@ -42,6 +42,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * 2) port check in advance. all children uops access dcache regardless of port status
  */
 
+#include <algorithm>
 #include "exec.h"
 #include "knob.h"
 #include "uop.h"
@@ -231,6 +232,13 @@ void exec_c::clear_ports() {
   for (int ii = 0; ii < max_EXEC; ++ii) {
     m_port_used[ii] = 0;
   }
+
+  // Decrease latency for each tensor core
+  for (size_t i = 0; i < m_tensor_core.size(); ++i) {
+      if (m_tensor_core[i] > 0) {
+          m_tensor_core[i]--;
+      }
+  }
 }
 
 // get uop latency
@@ -246,21 +254,28 @@ int exec_c::get_latency(Uop_Type uop_type) {
 
 // check available execution port for specific instruction type
 bool exec_c::port_available(int exec_type) {
-  // get_latency(uop_type)
   unsigned int curr_kernel_id =  m_simBase->m_core_pointers[m_core_id]->get_gpu_allocate()->get_kernel_id();
   if(exec_type == tensor_EXEC){
+    // Find total active cores for the tensor pipelines
+    int active_cores = std::count_if(m_tensor_core.begin(), m_tensor_core.end(),
+                                 [](int latency) { return  latency > 0; });
     // Not found existing kernel
     if (!m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]) {
       m_simBase->m_kernel_stats[curr_kernel_id][m_core_id] = std::make_unique<KernelStatistics>(curr_kernel_id);
     }
     m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_active_cycles += 1;
-    m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipelines += m_port_used[tensor_EXEC];
-  }
+    m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipelines += active_cores;
 
-  if(m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipe_max_usage < m_port_used[gen_EXEC]){
-    m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipe_max_usage = m_port_used[gen_EXEC];
+    if(m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipe_max_usage < active_cores){
+    m_simBase->m_kernel_stats[curr_kernel_id][m_core_id]->tensor_pipe_max_usage = active_cores;
+    }
+
+    return active_cores < m_tensor_core.size();
   }
-  return m_port_used[exec_type] < m_max_port[exec_type];
+  else
+  {
+    return m_port_used[exec_type] < m_max_port[exec_type];
+  }
 }
 
 // use an execution port
@@ -276,7 +291,21 @@ void exec_c::use_port(int thread_id, int entry) {
 
   // use specified port
   if (!uop->m_bogus) {
-    ++m_port_used[uop->m_exec_num];
+    if(uop->m_exec_num == tensor_EXEC)
+    {
+      for (size_t i = 0; i < m_tensor_core.size(); ++i)
+      {
+        if (m_tensor_core[i] == 0)
+        {
+            m_tensor_core[i] = get_latency(UOP_NVBIT_HMMA);
+            break;
+        }
+      }
+    }
+    else
+    {
+      ++m_port_used[uop->m_exec_num];
+    }
   }
 }
 
